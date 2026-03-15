@@ -44,6 +44,12 @@ would become important.
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+My scheduler makes a tradeoff by using straightforward rules instead of a more 
+complex optimization model with many constraints. This means the system is 
+easier to understand, faster to run, and simpler to debug, but it may not always 
+generate the absolute “best” schedule in every edge case. This tradeoff is 
+reasonable for this scenario because PawPal is a starter app, and reliability, 
+readability, and maintainability matter more than optimization.
 ---
 
 ## 3. AI Collaboration

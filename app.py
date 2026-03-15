@@ -42,6 +42,7 @@ def schedule_task(
     title: str,
     description: str,
     due_in_hours: int,
+    duration_minutes: int,
     priority_label: str,
     frequency: str,
 ) -> Task:
@@ -56,6 +57,7 @@ def schedule_task(
         description=description,
         due_datetime=datetime.now(timezone.utc) + timedelta(hours=due_in_hours),
         priority=priority_map[priority_label],
+        duration_minutes=duration_minutes,
         frequency=frequency,
     )
     st.session_state.task_id_counter += 1
@@ -74,6 +76,7 @@ def task_rows(tasks: list[Task]) -> list[dict[str, str | int | bool]]:
             "task_id": task.task_id,
             "title": task.title,
             "due_utc": task.due_datetime.strftime("%Y-%m-%d %H:%M UTC"),
+            "duration_min": task.duration_minutes,
             "priority": task.priority,
             "frequency": task.frequency,
             "completed": task.completed,
@@ -147,6 +150,7 @@ else:
         task_title = st.text_input("Task title", value="Morning walk")
         task_description = st.text_area("Description", value="20 minute walk")
         due_in_hours = st.number_input("Due in (hours)", min_value=1, max_value=168, value=2)
+        duration_minutes = st.number_input("Duration (minutes)", min_value=1, max_value=240, value=30)
     with task_col2:
         priority_label = st.selectbox("Priority", ["high", "medium", "low"], index=0)
         frequency = st.selectbox("Frequency", ["once", "daily", "weekly", "monthly"], index=0)
@@ -159,6 +163,7 @@ else:
                 title=task_title,
                 description=task_description,
                 due_in_hours=int(due_in_hours),
+                duration_minutes=int(duration_minutes),
                 priority_label=priority_label,
                 frequency=frequency,
             )
@@ -173,6 +178,11 @@ if st.button("Generate schedule"):
     all_tasks = scheduler.get_all_tasks()
     pending_tasks = scheduler.get_pending_tasks()
     upcoming_tasks = scheduler.get_upcoming_tasks(within_hours=24)
+    filtered_sorted_tasks = scheduler.filter_and_sort_tasks(
+        include_completed=False,
+        max_priority=2,
+    )
+    conflicts = scheduler.detect_conflicts()
 
     st.markdown("**All tasks (across pets)**")
     st.table(task_rows(all_tasks) if all_tasks else [])
@@ -182,6 +192,25 @@ if st.button("Generate schedule"):
 
     st.markdown("**Upcoming in next 24h**")
     st.table(task_rows(upcoming_tasks) if upcoming_tasks else [])
+
+    st.markdown("**Filtered + Sorted (pending, priority <= 2)**")
+    st.table(task_rows(filtered_sorted_tasks) if filtered_sorted_tasks else [])
+
+    st.markdown("**Conflict detection (overlapping task windows)**")
+    if conflicts:
+        st.table(
+            [
+                {
+                    "task_a_id": task_a.task_id,
+                    "task_a_title": task_a.title,
+                    "task_b_id": task_b.task_id,
+                    "task_b_title": task_b.title,
+                }
+                for task_a, task_b in conflicts
+            ]
+        )
+    else:
+        st.success("No conflicts detected.")
 
 st.divider()
 
