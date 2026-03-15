@@ -7,6 +7,11 @@
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
+My initial design will consist of several classes: Owner, Pet, Task, Schedule. 
+Each owner will have pets they are assigned to, and each pet will have pet care
+tasks that can be tracked. Schedule will be a separate class that will contain
+a list of Task objects for each pet.
+
 **b. Design changes**
 
 - Did your design change during implementation?
