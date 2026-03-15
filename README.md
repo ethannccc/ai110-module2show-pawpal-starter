@@ -41,3 +41,23 @@ pip install -r requirements.txt
 5. Add tests to verify key behaviors.
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
+
+## Testing PawPal+
+
+Run the test suite with:
+
+```bash
+python -m pytest
+```
+
+Current tests cover:
+
+- Task validation for timezone-aware datetimes
+- Task duration edge-case validation
+- Schedule copy-safety behavior (`get_tasks` returns a copy)
+- Scheduler filtering and sorting behavior
+- Conflict detection for overlapping tasks
+
+Confidence Level: ★★★☆☆ (3/5)
+
+This rating is based on recent results showing most core behaviors pass, with one remaining failing scenario tied to a conflict-detection design decision.
