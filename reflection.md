@@ -34,6 +34,11 @@ specific tasks for each particular pet.
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
 
+My scheduler considered constraints like time zones and priority. I decided
+these constraints mattered the most because in an actual app if it was deployed,
+you'd need to consider the user experience and thus time zones and priority
+would become important. 
+
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
