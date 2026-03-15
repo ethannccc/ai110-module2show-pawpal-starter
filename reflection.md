@@ -17,6 +17,14 @@ a list of Task objects for each pet.
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
 
+My design changed slightly during implementation. Copilot was suggesting a fix
+for the built-in datetime class for Python, which is a bit naive and doesn't
+account for varying timezones, which can break logic for something that relies 
+on correct time as much as a scheduler. It also improved my UML diagram by 
+adding a few missing attributes such as a list of Pets for each Owner. I made
+this change because Owners should be able to own multiple Pets and thus have
+specific tasks for each particular pet.
+
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
